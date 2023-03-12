@@ -1,28 +1,12 @@
-﻿using System.Net;
-using System.Net.Sockets;
-
+﻿using System.Net.Sockets;
 
 var ipString = "127.0.0.1";
 var port = 27001;
 
-
-// var ipAddress = IPAddress.Parse(ipString);
-   
-// using var client = new TcpClient();
-// client.Connect(ipAddress, port);
-
-
-
 using var client = new TcpClient(ipString, port);
 
+var serverStream = client.GetStream();
 
-var stream = client.GetStream();
-var bw = new BinaryWriter(stream);
-var br = new BinaryReader(stream);
-
-
-while (true)
-{
-    bw.Write(Console.ReadLine() ?? string.Empty);
-    Console.WriteLine($"Answer: {br.ReadString()}");
-}
+var fileStream = new FileStream("Emin-Matata.jpg", FileMode.Create, FileAccess.Write);
+serverStream.CopyTo(fileStream);
+fileStream.Flush();
